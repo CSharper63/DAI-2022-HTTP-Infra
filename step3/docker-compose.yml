@@ -1,21 +1,28 @@
 version: "3.9"
 services:
+  # Static http server
   static-server:
-    # static http server
+    deploy:
+      # Creates 3 replicas of this image, step 3a
+      replicas: 3
     build: ../step1 # path where Dockerfile from step1 is stored
     volumes:
       - ../step1/public-html:/usr/local/apache2/htdocs/
     labels:
       - "traefik.http.services.static-server.loadbalancer.server.port=80"
       - "traefik.http.routers.static-server.rule=PathPrefix(`/`)"
+  # Dynamic http server
   dynamic-server:
-    # dynamic http server
+    # Creates 3 replicas of this image, step 3a
+    deploy:
+      replicas: 3
     build: ../step2 # path where Dockerfile from step1 is stored
     labels:
-      - "traefik.http.services.dynamic-server.loadbalancer.server.port=8081"
-      - "traefik.http.routers.dynamic-server.rule=PathPrefix(`/api/`)"
+      - "traefik.http.services.dynamic-server.loadbalancer.server.port=8081" # Configures the load balancer with the image port of the image in step 2
+      - "traefik.http.routers.dynamic-server.rule=PathPrefix(`/api/`)" # Replaces all request with /api/ by / as traefik does not know the path, then make a call to the js server created at step 2
       - "traefik.http.routers.dynamic-server.middlewares=replacepath"
       - "traefik.http.middlewares.replacepath.replacepath.path=/"
+  # Dynamic http server
   reverse-proxy:
     # The official v2 Traefik docker image
     image: traefik:v2.9
