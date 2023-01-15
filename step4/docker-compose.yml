@@ -2,9 +2,6 @@ version: "3.9"
 services:
   # Dynamic http server
   dynamic-server:
-    # Creates 3 replicas of this image, step 3a
-    deploy:
-      replicas: 3
     build: ../step2 # path where Dockerfile from step1 is stored
     labels:
       - "traefik.http.services.dynamic-server.loadbalancer.server.port=8081" # Configures the load balancer with the image port of the image in step 2

@@ -22,7 +22,7 @@ services:
       - "traefik.http.routers.dynamic-server.rule=PathPrefix(`/api/`)" # Replaces all request with /api/ by / as traefik does not know the path, then make a call to the js server created at step 2
       - "traefik.http.routers.dynamic-server.middlewares=replacepath"
       - "traefik.http.middlewares.replacepath.replacepath.path=/"
-  # Dynamic http server
+  # Reverse proxy
   reverse-proxy:
     # The official v2 Traefik docker image
     image: traefik:v2.9
