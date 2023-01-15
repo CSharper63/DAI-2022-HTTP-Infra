@@ -3,8 +3,26 @@
 <head>
    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
       integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+
+   <script type="text/javascript" language="javascript"
+      src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+   <script type="text/javascript" language="javascript"
+      src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
+   <script type="text/javascript" language="javascript"
+      src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+   <script type="text/javascript" language="javascript"
+      src="https://cdn.datatables.net/responsive/2.4.0/js/responsive.bootstrap4.min.js"></script>
+   <link rel="stylesheet" type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
+   <link rel="stylesheet" type="text/css"
+      href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+
    <script>
+
       $(document).ready(function () {
+         $('#table_id').DataTable();
          var idx = 0;
          setInterval(ajax_query, 1000);
          function ajax_query() {
@@ -12,11 +30,20 @@
                url: "/api/",
                contentType: "application/json",
                dataType: 'json',
-               success: function (data) {
-                  data = JSON.parse(data);
-                  idx++;
-                  console.log(`new api call, call number ${idx}:${data}`);
-                  $("p").prepend(`<b>new api call, call number</b> ${idx}:${data}<br />`);
+               success: function (d) { // call back on success
+                  const data = JSON.parse(JSON.stringify(d)); // not clean but works
+                  const firstname = data['results'][0]['name']['first'];
+                  const lastname = data['results'][0]['name']['last'];
+                  const email = data['results'][0]['email'];
+                  const phone = data['results'][0]['phone'];
+                  $("#table_id").find('tbody')
+                     .append($('<tr>')
+                        .append($('<td>').text(firstname)).append('</td>')
+                        .append($('<td>').text(lastname)).append('</td>')
+                        .append($('<td>').text(email)).append('</td>')
+                        .append($('<td>').text(phone)).append('</td>')
+                        .append('</tr>')
+                     );
                }
             });
          };
@@ -25,8 +52,25 @@
 </head>
 
 <body>
-   <h1>Look at the console, DAI step4</h1>
-   <p></p>
+   <h1>DAI - Call to dynamic server</h1>
+   <table id="table_id" class="display">
+      <thead>
+         <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th>Phone</th>
+         </tr>
+      </thead>
+      <tbody>
+         <tr>
+            <td>John</td>
+            <td>Doe</td>
+            <td>john@doe.me</td>
+            <td>888 000 000</td>
+         </tr>
+      </tbody>
+   </table>
 </body>
 
 </html>
