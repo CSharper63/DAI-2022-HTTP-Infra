@@ -11,6 +11,7 @@ const HOST = '0.0.0.0';
 const app = express();
 
 app.get('/', (req, res) => {
+    // Execute an API call to the following URL
     request('https://randomuser.me/api/', (error, response) => {
         if (!error && response.statusCode == 200) {
             console.log(response.body)
