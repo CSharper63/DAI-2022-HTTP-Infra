@@ -1,0 +1,32 @@
+<html>
+
+<head>
+   <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+      integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+   <script>
+      $(document).ready(function () {
+         var idx = 0;
+         setInterval(ajax_query, 1000);
+         function ajax_query() {
+            $.ajax({
+               url: "/api/",
+               contentType: "application/json",
+               dataType: 'json',
+               success: function (data) {
+                  data = JSON.parse(data);
+                  idx++;
+                  console.log(`new api call, call number ${idx}:${data}`);
+                  $("p").prepend(`<b>new api call, call number</b> ${idx}:${data}<br />`);
+               }
+            });
+         };
+      });
+   </script>
+</head>
+
+<body>
+   <h1>Look at the console, DAI step4</h1>
+   <p></p>
+</body>
+
+</html>
