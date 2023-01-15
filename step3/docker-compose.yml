@@ -12,7 +12,7 @@ services:
     # dynamic http server
     build: ../step2 # path where Dockerfile from step1 is stored
     labels:
-      - "traefik.http.services.dynamic-server.loadbalancer.server.port=80"
+      - "traefik.http.services.dynamic-server.loadbalancer.server.port=8081"
       - "traefik.http.routers.dynamic-server.rule=PathPrefix(`/api/`)"
       - "traefik.http.routers.dynamic-server.middlewares=replacepath"
       - "traefik.http.middlewares.replacepath.replacepath.path=/"
